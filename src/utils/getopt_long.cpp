@@ -50,7 +50,7 @@ static const struct option long_options[]=
 	//  {"reload",no_argument,&force_reload,1},
 	//  {"time",required_argument,NULL,'t'},
 	//  {"help",no_argument,NULL,'?'},
-	//  {"http09",no_argument,NULL,'9'},
+
 	//  {"http10",no_argument,NULL,'1'},
 	//  {"http11",no_argument,NULL,'2'},
 	//  {"get",no_argument,&method,METHOD_GET},
