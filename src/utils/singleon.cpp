@@ -14,7 +14,7 @@ public:
 
     }
 private:
-    Singleton(){
+    Singleton(){//保证调用new一定会失败
         std::cout<<"constructor called!"<<std::endl;
     }
 };

@@ -33,7 +33,7 @@ static void usage(void)
 	"  -t|--time <sec>          Run benchmark for <sec> seconds. Default 30.\n"
 	"  -p|--proxy <server:port> Use proxy server for request.\n"
 	"  -c|--clients <n>         Run <n> HTTP clients at once. Default one.\n"
-	"  -9|--http09              Use HTTP/0.9 style requests.\n"
+
 	"  -1|--http10              Use HTTP/1.0 protocol.\n"
 	"  -2|--http11              Use HTTP/1.1 protocol.\n"
 	"  --get                    Use GET request method.\n"
@@ -46,20 +46,21 @@ static void usage(void)
 };
 static const struct option long_options[]=
 {
-	//  {"force",no_argument,&force,1},
-	//  {"reload",no_argument,&force_reload,1},
-	//  {"time",required_argument,NULL,'t'},
-	//  {"help",no_argument,NULL,'?'},
+	 {"force",no_argument,&force,1},
+	 {"reload",no_argument,&force_reload,1},
+	 {"time",required_argument,NULL,'t'},
+		 {"proxy",required_argument,NULL,'p'},
+		{"clients",required_argument,NULL,'c'},
 
-	//  {"http10",no_argument,NULL,'1'},
-	//  {"http11",no_argument,NULL,'2'},
-	//  {"get",no_argument,&method,METHOD_GET},
-	//  {"head",no_argument,&method,METHOD_HEAD},
-	//  {"options",no_argument,&method,METHOD_OPTIONS},
-	//  {"trace",no_argument,&method,METHOD_TRACE},
-	//  {"version",no_argument,NULL,'V'},
-	//  {"proxy",required_argument,NULL,'p'},
-	 {"clients",required_argument,NULL,'c'},
+
+	 {"http10",no_argument,NULL,'1'},
+	 {"http11",no_argument,NULL,'2'},
+	 {"get",no_argument,&method,METHOD_GET},
+	 {"head",no_argument,&method,METHOD_HEAD},
+	 {"options",no_argument,&method,METHOD_OPTIONS},
+	 {"trace",no_argument,&method,METHOD_TRACE},
+		 {"help",no_argument,NULL,'?'},
+	 {"version",no_argument,NULL,'V'},
 	 {NULL,0,NULL,0}
 };
 
