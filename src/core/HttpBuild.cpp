@@ -27,11 +27,8 @@ class HttpBuild{
             smatch res;
             regex re(pattern);
            if( regex_search(url,res,re))
-           {
-              res[3];  
-              /////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //   !!!!!!!!!!!!!!!!!!!!!!转化为int
-           }
+              return stoi(res[3]);  
+        
               
             return 80;
 
@@ -42,13 +39,13 @@ class HttpBuild{
         {
 
         }
-        string GetHttpRquest(string url);
+        string BuildHttpRquest(string url);
         HttpBuild():port(80){}
 };
 
 int main()
 {
     HttpBuild build;
-   build.GetPort("http://blog.csdn.net/fengbingchun/");
+   build.GetPort("http://blog.csdn.net:800/fengbingchun/");
    
 }
