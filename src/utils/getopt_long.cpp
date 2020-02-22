@@ -69,18 +69,21 @@ int main(int argc,char **argv)
 {
     int op;
     int options_index=0;
-    while(op=getopt_long(argc,argv,"c:t:?",long_options,&options_index)!=-1){
+    while((op=getopt_long(argc,argv,"c:t:?",long_options,&options_index))!=-1){
         switch(op)
         {
             case 'c':
-                clients=atoi(optarg);cout<<clients<<endl;break;
+                clients=atoi(optarg);
+				cout<<clients<<endl;
+				break;
             case '?':
                 usage();break;
             default:
                 break;
         }
     }
-    if(optind==argc){
+    if(optind==argc)
+	{
          printf("webbench: Missing URL!\n");
          usage();
     }
