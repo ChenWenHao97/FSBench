@@ -7,6 +7,10 @@
 #include<unistd.h>
 #include <regex>
 #include <utility>
+#include <netdb.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
 using namespace std;
 class HttpBuild{
     public:
@@ -28,24 +32,70 @@ class HttpBuild{
             regex re(pattern);
            if( regex_search(url,res,re))
               return stoi(res[3]);  
-        
-              
-            return 80;
-
-           
+            return 80;//默认端口号
             
         }
-        string GetHostByURL(string url)//使用gethostbyname函数得到hostname
+        string GetHostByURL(string url)
+        {
+            if(!isLegalURL(url))
+                return nullptr;
+            string pattern{"(http?)://(.*)/"};
+            smatch res;
+            regex re(pattern);
+            if(regex_search(url,res,re))
+             return res[2];
+        }
+        string GetIpByURL(string url)//使用gethostbyname函数得到hostname
+        {
+            const char *name =GetHostByURL(url).c_str();
+            struct hostent *hptr;
+ 
+            hptr = gethostbyname(name);
+            if (hptr == NULL) 
+            {
+                 cout<<"gethostbyname error for host:"<<name<<":"<<hstrerror(h_errno)<<endl;
+                 return nullptr;
+            }  
+
+            //输出主机的规范名
+            // printf("\tofficial: %s\n", hptr->h_name);
+         
+            //输出主机的别名
+            char **pptr;
+            char str[INET_ADDRSTRLEN];
+            // for (pptr=hptr->h_aliases; *pptr!=NULL; pptr++) {
+            //     printf("\ttalias: %s\n", *pptr);
+            // }
+         
+            //输出ip地址
+            switch (hptr->h_addrtype) 
+            {
+                case AF_INET:
+                    pptr = hptr->h_addr_list;
+                    // for (; *pptr!=NULL; pptr++) 
+                    // {
+                    //     printf("\taddress: %s\n",
+                    //             inet_ntop(hptr->h_addrtype, hptr->h_addr, str, sizeof(str)));
+                    // }
+                    return inet_ntop(hptr->h_addrtype, hptr->h_addr, str, sizeof(str));
+                    break;
+                default:
+                    cout<<"unknown address type"<<endl;
+                    break;
+            }
+        
+                    return nullptr;
+        }
+             string BuildHttpRquest(string url)
         {
 
         }
-        string BuildHttpRquest(string url);
         HttpBuild():port(80){}
 };
 
 int main()
 {
     HttpBuild build;
-   build.GetPort("http://blog.csdn.net:800/fengbingchun/");
+   build.GetIpByURL("http://www.baidu.com/");
    
 }
