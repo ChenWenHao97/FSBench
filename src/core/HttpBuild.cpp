@@ -10,15 +10,22 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-
+#include"Parser.hpp"
 using namespace std;
 class HttpBuild{
     public:
         int port;
         bool isLegalURL(string url)
         {
-            string pattern{"(https?)://.*(.cn|.com|.htm|.html|.aspx?|.jsp|.php|.net|/|#)$"};
+            if(url.size()>1500)
+            {
+                cout <<"url长度过长"<<endl;
+                return  false;
+            }
+            string pattern{"(https?)://.*(.cn|.com|.htm|.html|.aspx?|.jsp|.php|.net||#)$"};
             regex re(pattern);
+            // cout<<"isLegal"<<endl;
+            //  cout<<regex_match(url,re)<<endl;
            return regex_match(url,re);
         //   正则表达式例子 https://blog.csdn.net/fengbingchun/article/details/54835571
         }
@@ -38,12 +45,22 @@ class HttpBuild{
         string GetHostByURL(string url)
         {
             if(!isLegalURL(url))
-                return nullptr;
-            string pattern{"(http?)://(.*)/"};
+                return "";
+            string pattern1{"(http?)://(.*)/"};
+            string pattern2{"(http?)://(.*)"};
             smatch res;
-            regex re(pattern);
-            if(regex_search(url,res,re))
-             return res[2];
+            regex re1(pattern1);
+            regex re2(pattern2);
+            if(regex_search(url,res,re1))
+            {
+                cout<<res[2]<<endl;
+                return res[2];
+            }
+            else if(regex_search(url,res,re2))
+            {
+                 cout<<res[2]<<endl;
+                return res[2];
+            }
         }
         string GetIpByURL(string url)//使用gethostbyname函数得到hostname
         {
@@ -54,7 +71,7 @@ class HttpBuild{
             if (hptr == NULL) 
             {
                  cout<<"gethostbyname error for host:"<<name<<":"<<hstrerror(h_errno)<<endl;
-                 return nullptr;
+                 return "";
             }  
 
             //输出主机的规范名
@@ -84,18 +101,93 @@ class HttpBuild{
                     break;
             }
         
-                    return nullptr;
+                    return "";
         }
-             string BuildHttpRquest(string url)
+        string GetCatalogue(string url)
         {
+             if(!isLegalURL(url))
+                return "";
+            // cout << "url22"<<endl;    
+            string pattern{"(https?)://.*(.cn|.com|.htm|.html|.aspx?|.jsp|.php|.net)/(.*)"};
+            smatch res;
+            regex re(pattern);
+            //  cout << "url333"<<endl;    
+        
+           if(regex_search(url,res,re))
+           {
+               string str(res[3]);
+               return "/"+str;
+           }
+            return "/";//默认访问根
+        }
+        string BuildHttpRquest(string url)
+        {
+            string HttpRquest="";
+            string catalogue = GetCatalogue(url);
 
+            //  cout<<"buildHTTp"<<endl;
+
+            string Referer = "Referer:"+url+"\n";
+            string AcceptLanguage="Accept-Language: zh-cn\n";
+            string AcceptCharst = "Accept-Charset: GB2312,utf-8;q=0.7,*;q=0.7\n";
+            string AcceptEncoding="Accept-Encoding: gzip, deflate\n";
+            string UserAgent = "Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; TheWorld)\n";
+            //  cout<<"buildHTTp"<<endl;
+
+            string Host = GetHostByURL(url);
+            string Longcon = "Connection: Keep-Alive\n";
+
+            //  cout<<"buildHTTp"<<endl;
+
+
+            int port_=GetPort(url);
+            // string Shortcon = 
+            bool http10 = Parser::get_instance().http10;
+            //  cout<<"buildHTTp3"<<endl;
+
+            bool http11 = Parser::get_instance().http11;
+
+            switch(Parser::get_instance().method)
+            {
+               case METHOD_GET: HttpRquest =HttpRquest+"GET ";break;
+	           case METHOD_HEAD:HttpRquest =HttpRquest+"HEAD ";break;
+	           case METHOD_OPTIONS: HttpRquest =HttpRquest+"OPTIONS ";break;
+	           case METHOD_TRACE: HttpRquest =HttpRquest+"TRACE ";break;
+            }
+            // cout<<"buildHTTp"<<endl;
+            if(http10)
+            {
+                HttpRquest +="HTTP/1.0\n";
+                HttpRquest+=Referer;
+                HttpRquest+="Host:"+Host;
+                // +to_string(port_);
+                // cout<<"buildHTTp"<<endl;
+
+                HttpRquest+=UserAgent;
+                HttpRquest+=AcceptLanguage;
+                HttpRquest+=AcceptEncoding;
+                HttpRquest+=AcceptCharst;
+                HttpRquest+=Longcon;
+
+
+                
+                cout<<HttpRquest<<endl;
+            }
+            else if(http11)
+            {
+                HttpRquest = HttpRquest+catalogue+"HTTP/1.1";
+                cout<<HttpRquest<<endl;
+            }
+            return HttpRquest;
         }
         HttpBuild():port(80){}
 };
 
-int main()
+int main(int argc,char**argv)
 {
+    string url=Parser::get_instance().handle(argc,argv);
     HttpBuild build;
-   build.GetIpByURL("http://www.baidu.com/");
+    build.BuildHttpRquest(url);
+//   "http://www.baidu.com"
    
 }
