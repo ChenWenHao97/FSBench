@@ -13,8 +13,8 @@ constexpr int METHOD_TRACE=3;
 constexpr const char* PROGRAM_VERSION="1.5";
 class BenchRes{
     public:
-        string hostname;
-        int port;
+        // string hostname;
+        // int port;
         int finished;
         int failed;//连接失败数
         int TotalnConnectNum;//总共连接数
@@ -60,8 +60,8 @@ class Parser{
 	        "  -t|--time <sec>          Run benchmark for <sec> seconds. Default 30.\n"
 	        "  -p|--proxy <server:port> Use proxy server for request.\n"
 	        "  -c|--clients <n>         Run <n> HTTP clients at once. Default one.\n"
-	        "  -0|--http10              Use HTTP/1.0 protocol.\n"
-	        "  -1|--http11              Use HTTP/1.1 protocol.\n"
+	        "  -1|--http10              Use HTTP/1.0 protocol.\n"
+	        "  -2|--http11              Use HTTP/1.1 protocol.\n"
 	        "  --get                    Use GET request method.\n"
 	        "  --head                   Use HEAD request method.\n"
 	        "  --options                Use OPTIONS request method.\n"
@@ -72,8 +72,8 @@ class Parser{
             }
         }
         const struct option long_options[14]={
-            {"force",no_argument,&force,1},
-	        {"reload",no_argument,&reload,1},
+            {"force",no_argument,&force,'f'},
+	        {"reload",no_argument,&reload,'r'},
 	        {"time",required_argument,NULL,'t'},
 	        {"proxy",required_argument,NULL,'p'},
 	        {"clients",required_argument,NULL,'c'},
@@ -107,9 +107,9 @@ class Parser{
    
                case 'c':
                    clients=atoi(optarg);;break;
-               case 0:
+               case '1':
                    http10=true,http11 = false;break;
-               case 1:
+               case '2':
                    http10 = false,http11=true;break;
                case '?':
                    usage();break;

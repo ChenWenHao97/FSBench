@@ -10,7 +10,6 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include"Parser.hpp"
 using namespace std;
 class HttpBuild{
     public:
@@ -33,57 +32,57 @@ class HttpBuild{
         {
             if(!isLegalURL(url))
                 return -1;
-            //  cout << "url"<<endl;    
+            //  cout << "islegal"<<endl;    
             string pattern{"(.*):(.*):([0-9]{0,5})"};
             smatch res;
             regex re(pattern);
            if( regex_search(url,res,re))
               return stoi(res[3]);  
-            return 80;//默认端口号
+            return port;//默认端口号
             
         }
         string GetHostByURL(string url)
         {
+            if(url[4]=='s')
+                port = 443;
             if(!isLegalURL(url))
                 return "";
-            string pattern1{"(http?)://(.*)/"};
-            string pattern2{"(http?)://(.*)"};
+            string pattern1{"(.*)://(.*)/"};
+            string pattern2{"(.*)://(.*)"};
             smatch res;
             regex re1(pattern1);
             regex re2(pattern2);
             if(regex_search(url,res,re1))
             {
-                cout<<res[2]<<endl;
+                // cout<<res[2]<<endl;
                 return res[2];
-            }
-            else if(regex_search(url,res,re2))
+            }else if(regex_search(url,res,re2))
             {
-                 cout<<res[2]<<endl;
+                //  cout<<res[2]<<endl;
                 return res[2];
             }
+            //  cout << "GetHostByURL  func"<<endl;    
         }
         string GetIpByURL(string url)//使用gethostbyname函数得到hostname
         {
             const char *name =GetHostByURL(url).c_str();
+            // cout <<name<<endl;
             struct hostent *hptr;
- 
+            //  cout << "GetIpByURL  11"<<endl;    
+            
             hptr = gethostbyname(name);
             if (hptr == NULL) 
             {
                  cout<<"gethostbyname error for host:"<<name<<":"<<hstrerror(h_errno)<<endl;
                  return "";
             }  
+            //  cout << "GetIpByURL  22"<<endl;    
 
-            //输出主机的规范名
-            // printf("\tofficial: %s\n", hptr->h_name);
          
             //输出主机的别名
             char **pptr;
             char str[INET_ADDRSTRLEN];
-            // for (pptr=hptr->h_aliases; *pptr!=NULL; pptr++) {
-            //     printf("\ttalias: %s\n", *pptr);
-            // }
-         
+
             //输出ip地址
             switch (hptr->h_addrtype) 
             {
@@ -100,18 +99,20 @@ class HttpBuild{
                     cout<<"unknown address type"<<endl;
                     break;
             }
-        
+             cout << "GetIpByURL33"<<endl;    
+
                     return "";
         }
         string GetCatalogue(string url)
         {
              if(!isLegalURL(url))
                 return "";
-            // cout << "url22"<<endl;    
+
             string pattern{"(https?)://.*(.cn|.com|.htm|.html|.aspx?|.jsp|.php|.net)/(.*)"};
             smatch res;
             regex re(pattern);
-            //  cout << "url333"<<endl;    
+            //  cout << "GetCatalogue"<<endl;    
+
         
            if(regex_search(url,res,re))
            {
@@ -120,13 +121,13 @@ class HttpBuild{
            }
             return "/";//默认访问根
         }
-        string BuildHttpRquest(string url)
+        string BuildHttpRequest(string url)
         {
             string HttpRquest="";
             string catalogue = GetCatalogue(url);
 
             //  cout<<"buildHTTp"<<endl;
-
+            string Accept = "Accept:text/xml;Content-Type:text/html\n";
             string Referer = "Referer:"+url+"\n";
             string AcceptLanguage="Accept-Language: zh-cn\n";
             string AcceptCharst = "Accept-Charset: GB2312,utf-8;q=0.7,*;q=0.7\n";
@@ -161,33 +162,41 @@ class HttpBuild{
                 HttpRquest+=Referer;
                 HttpRquest+="Host:"+Host;
                 // +to_string(port_);
-                // cout<<"buildHTTp"<<endl;
 
                 HttpRquest+=UserAgent;
+                HttpRquest+=Accept;
                 HttpRquest+=AcceptLanguage;
                 HttpRquest+=AcceptEncoding;
-                HttpRquest+=AcceptCharst;
-                HttpRquest+=Longcon;
+                HttpRquest+=AcceptCharst+"\n";
 
-
-                
-                cout<<HttpRquest<<endl;
+                cout<<HttpRquest;
             }
             else if(http11)
             {
-                HttpRquest = HttpRquest+catalogue+"HTTP/1.1";
-                cout<<HttpRquest<<endl;
+                HttpRquest +="HTTP/1.1\n";
+                HttpRquest+=Referer;
+                HttpRquest+="Host:"+Host;
+                // +to_string(port_);
+
+                HttpRquest+=UserAgent;
+                HttpRquest+=Accept;
+                HttpRquest+=AcceptLanguage;
+                HttpRquest+=AcceptEncoding;
+                HttpRquest+=AcceptCharst;
+                HttpRquest+=Longcon+"\n";
+
+                cout<<HttpRquest;
             }
             return HttpRquest;
         }
         HttpBuild():port(80){}
 };
 
-int main(int argc,char**argv)
-{
-    string url=Parser::get_instance().handle(argc,argv);
-    HttpBuild build;
-    build.BuildHttpRquest(url);
-//   "http://www.baidu.com"
+// int main(int argc,char**argv)
+// {
+//     string url=Parser::get_instance().handle(argc,argv);
+//     HttpBuild build;
+//     build.BuildHttpRquest(url);
+// //   "http://www.baidu.com"
    
-}
+// }
