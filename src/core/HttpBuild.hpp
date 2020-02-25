@@ -65,6 +65,7 @@ class HttpBuild{
         }
         string GetIpByURL(string url)//使用gethostbyname函数得到hostname
         {
+
             const char *name =GetHostByURL(url).c_str();
             // cout <<name<<endl;
             struct hostent *hptr;
@@ -127,16 +128,16 @@ class HttpBuild{
             string catalogue = GetCatalogue(url);
 
             //  cout<<"buildHTTp"<<endl;
-            string Accept = "Accept:text/xml;Content-Type:text/html\n";
-            string Referer = "Referer:"+url+"\n";
-            string AcceptLanguage="Accept-Language: zh-cn\n";
-            string AcceptCharst = "Accept-Charset: GB2312,utf-8;q=0.7,*;q=0.7\n";
-            string AcceptEncoding="Accept-Encoding: gzip, deflate\n";
-            string UserAgent = "Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; TheWorld)\n";
+            string Accept = "Accept:text/xml;Content-Type:text/html\r\n";
+            string Referer = "Referer:"+url+"\r\n";
+            string AcceptLanguage="Accept-Language: zh-cn\r\n";
+            string AcceptCharst = "Accept-Charset: GB2312,utf-8;q=0.7,*;q=0.7\r\n";
+            string AcceptEncoding="Accept-Encoding: gzip, deflate\r\n";
+            string UserAgent = "Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; TheWorld)\r\n";
             //  cout<<"buildHTTp"<<endl;
 
             string Host = GetHostByURL(url);
-            string Longcon = "Connection: Keep-Alive\n";
+            string Longcon = "Connection: Keep-Alive\r\n";
 
             //  cout<<"buildHTTp"<<endl;
 
@@ -158,22 +159,24 @@ class HttpBuild{
             // cout<<"buildHTTp"<<endl;
             if(http10)
             {
-                HttpRquest +="HTTP/1.0\n";
+                HttpRquest +=GetCatalogue(url);
+                HttpRquest +=" HTTP/1.0\r\n";
                 HttpRquest+=Referer;
-                HttpRquest+="Host:"+Host;
+                HttpRquest+="Host:"+Host+"\r\n";
                 // +to_string(port_);
 
                 HttpRquest+=UserAgent;
                 HttpRquest+=Accept;
                 HttpRquest+=AcceptLanguage;
                 HttpRquest+=AcceptEncoding;
-                HttpRquest+=AcceptCharst+"\n";
+                HttpRquest+=AcceptCharst+"\r\n";
 
                 cout<<HttpRquest;
             }
             else if(http11)
             {
-                HttpRquest +="HTTP/1.1\n";
+                HttpRquest +=GetCatalogue(url);
+                HttpRquest +=" HTTP/1.1\r\n";
                 HttpRquest+=Referer;
                 HttpRquest+="Host:"+Host;
                 // +to_string(port_);
@@ -183,7 +186,8 @@ class HttpBuild{
                 HttpRquest+=AcceptLanguage;
                 HttpRquest+=AcceptEncoding;
                 HttpRquest+=AcceptCharst;
-                HttpRquest+=Longcon+"\n";
+                HttpRquest+=Longcon;
+                HttpRquest+="\r\n";
 
                 cout<<HttpRquest;
             }
