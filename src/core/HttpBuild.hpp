@@ -30,9 +30,23 @@ class HttpBuild{
         }
         int GetPort(string url)//解析url里面端口号，默认http为80
         {
+            
+            if(isIP(url))
+            {
+                string pattern{"(.*).(.*).(.*).(.*):(.*)"};
+                smatch res;
+                regex re(pattern);
+                if( regex_search(url,res,re))
+                {
+                    cout<<res[5]<<endl;
+                    return stoi(res[5]); 
+                }
+                     
+                return 80;
+            }    
             if(!isLegalURL(url))
                 return -1;
-            //  cout << "islegal"<<endl;    
+            //  cout << "islegal"<<endl;
             string pattern{"(.*):(.*):([0-9]{0,5})"};
             smatch res;
             regex re(pattern);
@@ -65,7 +79,8 @@ class HttpBuild{
         }
         string GetIpByURL(string url)//使用gethostbyname函数得到hostname
         {
-
+            if(isIP(url))
+                return url;
             const char *name =GetHostByURL(url).c_str();
             // cout <<name<<endl;
             struct hostent *hptr;
@@ -106,6 +121,8 @@ class HttpBuild{
         }
         string GetCatalogue(string url)
         {
+            if(isIP(url))
+                return "/";
              if(!isLegalURL(url))
                 return "";
 
@@ -135,8 +152,11 @@ class HttpBuild{
             string AcceptEncoding="Accept-Encoding: gzip, deflate\r\n";
             string UserAgent = "Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; TheWorld)\r\n";
             //  cout<<"buildHTTp"<<endl;
-
-            string Host = GetHostByURL(url);
+            string Host;
+            if(isIP(url))
+                Host = url;
+            else 
+                Host = GetHostByURL(url);
             string Longcon = "Connection: Keep-Alive\r\n";
 
             //  cout<<"buildHTTp"<<endl;
@@ -192,6 +212,17 @@ class HttpBuild{
                 cout<<HttpRquest;
             }
             return HttpRquest;
+        }
+        bool isIP(string url)
+        {
+            string pattern{"(.*).(.*).(.*).(.*)"};//直接输入ip的情况
+            smatch res;
+            regex re(pattern);
+            if(regex_match(url,res,re))
+            {
+                return true;
+            }
+            return false;
         }
         HttpBuild():port(80){}
 };
