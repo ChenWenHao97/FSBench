@@ -5,11 +5,12 @@
 #include<getopt.h>
 #include<stdio.h>
 #include<unistd.h>
-#include <regex>
-#include <utility>
-#include <netdb.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
+#include<regex>
+#include<utility>
+#include<netdb.h>
+#include<sys/socket.h>
+#include<arpa/inet.h>
+#include"Parser.hpp"
 using namespace std;
 class HttpBuild{
     public:
@@ -38,7 +39,7 @@ class HttpBuild{
                 regex re(pattern);
                 if( regex_search(url,res,re))
                 {
-                    cout<<res[5]<<endl;
+                    cout<<"isIP"<<res[5]<<endl;
                     return stoi(res[5]); 
                 }
                      
@@ -191,7 +192,7 @@ class HttpBuild{
                 HttpRquest+=AcceptEncoding;
                 HttpRquest+=AcceptCharst+"\r\n";
 
-                cout<<HttpRquest;
+                // cout<<HttpRquest;
             }
             else if(http11)
             {
@@ -209,13 +210,13 @@ class HttpBuild{
                 HttpRquest+=Longcon;
                 HttpRquest+="\r\n";
 
-                cout<<HttpRquest;
+                // cout<<HttpRquest;
             }
             return HttpRquest;
         }
         bool isIP(string url)
         {
-            string pattern{"(.*).(.*).(.*).(.*)"};//直接输入ip的情况
+            string pattern{"(\\d+).(\\d+).(\\d+).(\\d+)"};//直接输入ip的情况
             smatch res;
             regex re(pattern);
             if(regex_match(url,res,re))

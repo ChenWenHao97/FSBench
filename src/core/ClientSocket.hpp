@@ -11,7 +11,9 @@ class ClientSocket : private Socket
  public:
 
   ClientSocket ( std::string host, int port );
-  virtual ~ClientSocket(){};
+  virtual ~ClientSocket(){
+    // std::cout<<"~clientSocket"<<std::endl;
+    }
 
   const ClientSocket& operator << ( const std::string& ) const;
   const ClientSocket& operator >> ( std::string& ) const;
