@@ -16,7 +16,9 @@ public:
   // string hostname;
   // int port;
   int finished;
-  int64_t mirco;
+  int64_t connectTime;//连接时间
+  int64_t dealTime;//处理时间
+  int64_t waitTime;//等待时间
   int failed;            //连接失败数
   int TotalnConnectNum;  //总共连接数
   int TotalHtml;         //总共HTML数

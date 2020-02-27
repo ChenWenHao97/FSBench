@@ -8,7 +8,7 @@
 #include "SocketException.hpp"
 #include <thread>
 using namespace std;
-void thread_handle(string &url, int i)
+void thread_handle(string &url, int i)//一个soket一个线程，HTTP/1.0
 {
     HttpBuild build;
     Timer connect_;
@@ -20,7 +20,7 @@ void thread_handle(string &url, int i)
     cout << "第" << i << "个线程处理花费时间:" << deal_.time_micro() << endl;
     BenchRes res;
     res.finished = 1;
-    res.mirco = deal_.time_micro();
+    res.dealTime = deal_.time_micro();
     res.failed = 0;            //连接失败数
     res.TotalnConnectNum = 1;  //总共连接数
     res.TotalHtml = 0;         //总共HTML数
