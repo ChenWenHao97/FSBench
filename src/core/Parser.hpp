@@ -5,25 +5,14 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
+#include"BenchRes.cpp"
 using namespace std;
 constexpr int METHOD_GET = 0;
 constexpr int METHOD_HEAD = 1;
 constexpr int METHOD_OPTIONS = 2;
 constexpr int METHOD_TRACE = 3;
 constexpr const char *PROGRAM_VERSION = "1.5";
-class BenchRes {
-public:
-  // string hostname;
-  // int port;
-  int finished;
-  int64_t connectTime;//连接时间
-  int64_t dealTime;//处理时间
-  int64_t waitTime;//等待时间
-  int failed;            //连接失败数
-  int TotalnConnectNum;  //总共连接数
-  int TotalHtml;         //总共HTML数
-  int percecondRequests; //美秒连接数
-};
+
 class Parser {
 public:
   Parser(const Parser &) = delete;
@@ -135,25 +124,25 @@ public:
     }
     // cout<<"handle22"<<endl;
 
-    switch (method) {
-    case METHOD_GET:
-      cout << "GET ";
-      break;
-    case METHOD_HEAD:
-      cout << "HEAD ";
-      break;
-    case METHOD_OPTIONS:
-      cout << "OPTIONS ";
-      http10 = false;
-      http11 = true;
-      break;
-    case METHOD_TRACE:
-      cout << "TRACE";
-      http10 = false;
-      http11 = true;
-      break;
-    }
-    cout << argv[optind] << endl;
+    // switch (method) {
+    // case METHOD_GET:
+    //   cout << "GET ";
+    //   break;
+    // case METHOD_HEAD:
+    //   cout << "HEAD ";
+    //   break;
+    // case METHOD_OPTIONS:
+    //   cout << "OPTIONS ";
+    //   http10 = false;
+    //   http11 = true;
+    //   break;
+    // case METHOD_TRACE:
+    //   cout << "TRACE";
+    //   http10 = false;
+    //   http11 = true;
+    //   break;
+    // }
+    // cout << argv[optind] << endl;
     return argv[optind];
   }
 
