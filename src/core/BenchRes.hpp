@@ -4,6 +4,7 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
+#include<algorithm>
 using namespace std;
 class BenchRes
 {

@@ -32,7 +32,7 @@ void thread_handle(const string &url, int i) //一个soket一个线程，HTTP/1.
         Timer wait_;
         client_socket >> reply;
         cout << "第" << i << "个 等待花费时间:" << wait_.time_micro() << endl;
-        // cout <<reply<<endl;
+        cout <<reply<<endl;
         res.WaitTime = wait_.time_micro();
         Parser::get_instance().SumResult(res);
     }catch (SocketException &e)

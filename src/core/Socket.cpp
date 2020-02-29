@@ -112,13 +112,30 @@ int Socket::recv(std::string &s) const
   bool hashead = response.IsHeadEnd(str);
   if (hashead)
   {
-    cout<<"hashead!!!"<<endl;
+    // cout<<"hashead!!!"<<endl;
     int hascontentlength = response.GetContentLength(str);
     if (hascontentlength == -1)
       status = -1;
-    cout<<"!!!contentLength:"<<hascontentlength<<endl;
+    else if (hascontentlength - MAXRECV > 0)
+    {
+      hascontentlength -= MAXRECV;
+      s += buf;
+      while (hascontentlength > 0)
+      {
+        memset(buf, 0, MAXRECV + 1);
+        int recvdata = ::recv(m_sock, buf, MAXRECV, 0);
+        if (recvdata == -1)
+        {
+          status = -1;
+          break;
+        }
+        s += buf;
+        hascontentlength -= recvdata;
+      }
+    }
+    // cout<<"!!!contentLength:"<<hascontentlength<<endl;
   }
-  cout<<"socketRECV!!!"<<endl;
+  cout << "socketRECV!!!" << endl;
   if (status == -1)
   {
     std::cout << "status == -1   errno == " << errno << "  in Socket::recv\n";
@@ -130,7 +147,6 @@ int Socket::recv(std::string &s) const
   }
   else
   {
-    s = buf;
     return status;
   }
 }
