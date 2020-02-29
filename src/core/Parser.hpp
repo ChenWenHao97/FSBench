@@ -5,7 +5,7 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
-#include"BenchRes.hpp"
+#include "BenchRes.hpp"
 using namespace std;
 constexpr int METHOD_GET = 0;
 constexpr int METHOD_HEAD = 1;
@@ -13,18 +13,25 @@ constexpr int METHOD_OPTIONS = 2;
 constexpr int METHOD_TRACE = 3;
 constexpr const char *PROGRAM_VERSION = "1.5";
 
-class Parser {
+class Parser
+{
 public:
   Parser(const Parser &) = delete;
   Parser &operator=(const Parser &) = delete;
-  static Parser &get_instance(void) {
+  static Parser &get_instance(void)
+  {
     static Parser instance;
     // cout<<"get_instance"<<endl;
     return instance;
   }
-  void SumResult(BenchRes tmp) {
+  void SumResult(BenchRes tmp)
+  {
     lock_guard<mutex> locker(ThreadLock);
     Result.emplace_back(tmp);
+  }
+  vector<BenchRes> GetParserResult(void)
+  {
+    return Result;
   }
   int force;
   int reload;
@@ -40,7 +47,8 @@ public:
   int op;
   int options_index = 0;
   string url;
-  static void usage(void) {
+  static void usage(void)
+  {
     {
       fprintf(
           stderr,
@@ -77,13 +85,16 @@ public:
       {"help", no_argument, NULL, '?'},
       {"version", no_argument, NULL, 'V'},
       {NULL, 0, NULL, 0}};
-  string handle(int argc, char **argv) {
+  string handle(int argc, char **argv)
+  {
     // cout<<"handle11"<<endl;
     int op;
     int options_index;
     while ((op = getopt_long(argc, argv, "frt:p:c:12?v", long_options,
-                             &options_index)) != -1) {
-      switch (op) {
+                             &options_index)) != -1)
+    {
+      switch (op)
+      {
 
       case 'f':
         force = 1;
@@ -117,7 +128,8 @@ public:
         break;
       }
     }
-    if (optind == argc) {
+    if (optind == argc)
+    {
       cout << "没有URL!" << endl;
       usage();
       return "";
@@ -149,7 +161,8 @@ public:
 private:
   Parser()
       : force(0), reload(0), runtime(30), clients(1), http10(true),
-        http11(false), ProxyServer("") {
+        http11(false), ProxyServer("")
+  {
     //    cout<<"Parser"<<endl;
   }
   vector<BenchRes> Result;

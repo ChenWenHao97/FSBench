@@ -25,8 +25,8 @@ class ParseHttpResponse{
             string end ="\r\n";
             int contentend = response.find(end,contentbegin);
             string contentstr = response.substr(contentbegin+16,contentend-contentbegin-16);
-            cout<<"contentstr:"<<contentstr<<endl;
-            cout <<stoi(contentstr)<<endl;
+            // cout<<"contentstr:"<<contentstr<<endl;
+            // cout <<stoi(contentstr)<<endl;
             return stoi(contentstr);
         }
         ParseHttpResponse():HeadEndSymbol(false),ContentLength(0){}

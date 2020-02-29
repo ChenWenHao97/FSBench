@@ -14,7 +14,7 @@ Socket::~Socket()
   {
     ::close(m_sock);
   }
-  std::cout << "~socket" << std::endl;
+  // std::cout << "~socket" << std::endl;
 }
 
 bool Socket::create()
@@ -135,7 +135,7 @@ int Socket::recv(std::string &s) const
     }
     // cout<<"!!!contentLength:"<<hascontentlength<<endl;
   }
-  cout << "socketRECV!!!" << endl;
+  // cout << "socketRECV!!!" << endl;
   if (status == -1)
   {
     std::cout << "status == -1   errno == " << errno << "  in Socket::recv\n";
