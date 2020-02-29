@@ -5,12 +5,13 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
-
+#include "ParseHttpResponse.hpp"
 Socket::Socket() : m_sock(-1) { memset(&m_addr, 0, sizeof(m_addr)); }
 
 Socket::~Socket()
 {
-  if (is_valid()) {
+  if (is_valid())
+  {
     ::close(m_sock);
   }
   std::cout << "~socket" << std::endl;
@@ -102,11 +103,22 @@ int Socket::recv(std::string &s) const
   char buf[MAXRECV + 1];
 
   s = "";
-
+  int status;
   memset(buf, 0, MAXRECV + 1);
-
-  int status = ::recv(m_sock, buf, MAXRECV, 0);
-
+  status = ::recv(m_sock, buf, MAXRECV, 0);
+  // cout<<"buf:"<<buf<<endl;
+  string str = buf;
+  ParseHttpResponse response;
+  bool hashead = response.IsHeadEnd(str);
+  if (hashead)
+  {
+    cout<<"hashead!!!"<<endl;
+    int hascontentlength = response.GetContentLength(str);
+    if (hascontentlength == -1)
+      status = -1;
+    cout<<"!!!contentLength:"<<hascontentlength<<endl;
+  }
+  cout<<"socketRECV!!!"<<endl;
   if (status == -1)
   {
     std::cout << "status == -1   errno == " << errno << "  in Socket::recv\n";

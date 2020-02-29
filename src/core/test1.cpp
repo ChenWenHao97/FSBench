@@ -27,7 +27,6 @@ void thread_handle(const string &url, const string &request_string, int request_
     res.IsFinished = 1;
     res.DealTime = deal_.time_micro();
     res.IsFailed = 0;          //连接失败数
-    res.PercecondRequests = 0; //美秒连接数
     string reply;
     Timer wait_;
     client_socket >> reply;

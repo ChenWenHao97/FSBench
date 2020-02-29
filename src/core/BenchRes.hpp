@@ -4,9 +4,10 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
-
-struct BenchRes
+using namespace std;
+class BenchRes
 {
+    public:
     //每个线程拥有
     int IsFinished;
     int64_t ConnectTime; //连接时间
@@ -29,7 +30,7 @@ struct BenchRes
                 ResponseLength(0),TotalResponse(0)
     {
     }
-    void GetResult(const vector<BenchRes> res)
+    void GetResult(vector<BenchRes>& res)
     {
         BenchRes total;
         for(auto i: res)

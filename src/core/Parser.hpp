@@ -5,7 +5,7 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
-#include"BenchRes.cpp"
+#include"BenchRes.hpp"
 using namespace std;
 constexpr int METHOD_GET = 0;
 constexpr int METHOD_HEAD = 1;
