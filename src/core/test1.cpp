@@ -1,9 +1,6 @@
 #include "../utils/timer.hpp"
-#include "ClientSocket.cpp"
 #include "ClientSocket.hpp"
-#include "HttpBuild.hpp"
-// #include "./Parser.hpp"
-#include "Socket.cpp"
+#include "../http/HttpBuild.hpp"
 #include "Socket.hpp"
 #include "SocketException.hpp"
 #include <thread>
@@ -13,10 +10,11 @@ using namespace std;
 void thread_handle(const string &url, const string &request_string, int request_port, int i)
 {
   try
-  {   
+  {
     Timer connect_timepoint;
-    ClientSocket client_socket { url, request_port };
-    if (Parser::get_instance().force == 1) {
+    ClientSocket client_socket{url, request_port};
+    if (Parser::get_instance().force == 1)
+    {
       client_socket.Set_Non_Blocking(true);
     }
 
@@ -26,7 +24,7 @@ void thread_handle(const string &url, const string &request_string, int request_
     BenchRes res;
     res.IsFinished = 1;
     res.DealTime = deal_.time_micro();
-    res.IsFailed = 0;          //连接失败数
+    res.IsFailed = 0; //连接失败数
     string reply;
     Timer wait_;
     client_socket >> reply;

@@ -85,9 +85,9 @@ public:
         }
         cout << dealaverage / res.size() << endl;
         sort(res.begin(), res.end(), [](BenchRes a, BenchRes b) { return a.WaitTime < b.WaitTime; });
-        cout << "等待:" << res[0].WaitTime <<"               "
-             << res[(total.TotalFailed + total.TotalFinished) / 2].WaitTime <<"                  "
-             << res[res.size() - 1].DealTime <<"        ";
+        cout << "等待:" << res[0].WaitTime << "               "
+             << res[(total.TotalFailed + total.TotalFinished) / 2].WaitTime << "                  "
+             << res[res.size() - 1].DealTime << "        ";
         double waitaverage = 0;
         for (auto i : res)
         {
@@ -101,7 +101,7 @@ public:
             // cout << "singletime" << i.singleTime << endl;
         }
         sort(res.begin(), res.end(), [](BenchRes a, BenchRes b) { return a.singleTime < b.singleTime; });
-    
+
         cout << "所有:" << res[0].singleTime << "           "
              << res[(total.TotalFailed + total.TotalFinished) / 2].singleTime << "            "
              << res[res.size() - 1].singleTime << "            ";
@@ -114,12 +114,12 @@ public:
         cout << endl;
 
         cout << "请求处理时间分布(ms)" << endl; //有问题
-        cout << "50%      " << res[(total.TotalFailed + total.TotalFinished) / 2-1].singleTime << endl;
-        cout << "60%      " << res[(total.TotalFailed + total.TotalFinished) * 0.6-1].singleTime << endl;
-        cout << "70%      " << res[(total.TotalFailed + total.TotalFinished) * 0.7-1].singleTime << endl;
+        cout << "50%      " << res[(total.TotalFailed + total.TotalFinished) / 2 - 1].singleTime << endl;
+        cout << "60%      " << res[(total.TotalFailed + total.TotalFinished) * 0.6 - 1].singleTime << endl;
+        cout << "70%      " << res[(total.TotalFailed + total.TotalFinished) * 0.7 - 1].singleTime << endl;
         ;
-        cout << "80%      " << res[(total.TotalFailed + total.TotalFinished) * 0.8-1].singleTime << endl;
-        cout << "90%      " << res[(total.TotalFailed + total.TotalFinished) * 0.9-1].singleTime << endl;
-        cout << "100%     " << res[(total.TotalFailed + total.TotalFinished-1)].singleTime << endl;
+        cout << "80%      " << res[(total.TotalFailed + total.TotalFinished) * 0.8 - 1].singleTime << endl;
+        cout << "90%      " << res[(total.TotalFailed + total.TotalFinished) * 0.9 - 1].singleTime << endl;
+        cout << "100%     " << res[(total.TotalFailed + total.TotalFinished - 1)].singleTime << endl;
     }
 };
