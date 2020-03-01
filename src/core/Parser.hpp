@@ -36,6 +36,7 @@ public:
   int force;
   int reload;
   int runtime;        // second
+  volatile bool isexpired;//是否超时，加了volatile防止多线程出现问题
   string ProxyServer; //代理
   int clients;        //连接数
   bool http10;        //默认http10,GET\POST\DELETE
@@ -45,7 +46,7 @@ public:
   bool help;
   bool version;
   int op;
-  int options_index = 0;
+  // int options_index = 0;
   string url;
   static void usage(void)
   {
@@ -111,7 +112,7 @@ public:
 
       case 'c':
         clients = atoi(optarg);
-        ;
+        
         break;
       case '1':
         http10 = true, http11 = false;
@@ -161,7 +162,7 @@ public:
 private:
   Parser()
       : force(0), reload(0), runtime(30), clients(1), http10(true),
-        http11(false), ProxyServer("")
+        http11(false), ProxyServer(""),isexpired(false)
   {
     //    cout<<"Parser"<<endl;
   }
