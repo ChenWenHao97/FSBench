@@ -1,9 +1,10 @@
-#include "../utils/timer.hpp"
-#include "ClientSocket.hpp"
 #include "../http/HttpBuild.hpp"
+#include "../utils/timer.hpp"
 #include "Alarm.hpp"
+#include "ClientSocket.hpp"
 // #include "Socket.hpp"
 // #include "SocketException.hpp"
+#include "BenchRes.hpp"
 #include <thread>
 
 using namespace std;
@@ -13,8 +14,6 @@ void thread_handle(const string url, int i) //一个soket一个线程
     {
         if (url == "")
         {
-            cout << "url不合法" << endl;
-            Parser::get_instance().usage();
             exit(0);
         }
         HttpBuild build;
@@ -37,12 +36,16 @@ void thread_handle(const string url, int i) //一个soket一个线程
 
         string reply;
         Timer wait_;
+        if (Parser::get_instance().force == 1)
+            Parser::get_instance().SumResult(res);
+        else
+        {
+            client_socket >> reply;
+            res.ResponseLength = reply.size();
 
-        client_socket >> reply;
-        res.ResponseLength = reply.size();
-
-        res.WaitTime = wait_.time_micro(); //等待时间
-        Parser::get_instance().SumResult(res);
+            res.WaitTime = wait_.time_micro(); //等待时间
+            Parser::get_instance().SumResult(res);
+        }
 
         // cout << "thread:" << i << "结束" << endl;
     }
@@ -58,7 +61,7 @@ int main(int argc, char **argv)
 {
     try
     {
-        cout << "正在解析中，请稍后!" << endl;
+        cout << "正在解析中，请稍后!" <<endl<<endl;
         string url = Parser::get_instance().handle(argc, argv);
 
         Alarm setruntime(Parser::get_instance().runtime);
@@ -77,7 +80,8 @@ int main(int argc, char **argv)
                 thread_list.emplace_back(move(tmp));
             // thread_list.emplace_back(thread_handle, std::cref(url), i);
         }
-        for (auto &thread_ : thread_list) //几下线程数，防止一直在等待join,陷入死循环
+        for (auto &thread_ :
+             thread_list) //几下线程数，防止一直在等待join,陷入死循环
         {
             if (thread_.joinable())
                 thread_.join();
@@ -93,7 +97,7 @@ int main(int argc, char **argv)
         cout << endl;
         BenchRes finalresult;
         vector<BenchRes> res = Parser::get_instance().GetParserResult();
-        cout<<"结尾处"<<endl;
+        cout << "结尾处" << endl;
         finalresult.GetResult(res);
     }
     catch (SocketException &e)

@@ -1,4 +1,4 @@
-# Install script for directory: /home/cwh/bench
+# Install script for directory: /home/cwh/fsbench
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/cwh/bench/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/cwh/fsbench/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

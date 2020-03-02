@@ -3,8 +3,9 @@
 #include<vector>
 #include<mutex>
 #include<future>
+#include"timer.hpp"
 using namespace std;
-vector<shared_ptr<thread> > thread_list;
+vector<thread> thread_list;
 
 class Singleton
 {
@@ -28,7 +29,6 @@ public:
         }
 
     }
-    
    
 private:
     Singleton():res(10){//构造函数初始华
@@ -37,13 +37,15 @@ private:
     
      
 };
-void func()
-    {
-    vector<int> tmp{1,2,3,4,5,6};
-     Singleton& ins = Singleton::get_instance();
-    ins.add(tmp);
-   cout <<"leaving"<<endl;
-    }
+
+void func(Timer& tmp)
+{
+    // vector<int> tmp{1,2,3,4,5,6};
+    //  Singleton& ins = Singleton::get_instance();
+    // ins.add(tmp);
+    cout <<"leaving"<<endl;
+    cout <<tmp.time_micro()<<endl;
+}
 
 int main()
 {
@@ -51,10 +53,12 @@ int main()
     cin>>client;
     for(int i = 0;i < client;i++)
     {
-        thread_list.push_back(make_shared<thread>(func));
+        Timer deal_;
+        thread tmp{func,ref(deal_)};
+        thread_list.push_back(move(tmp));
     }
-    for(auto& thread : thread_list)
+    for(auto& thread_ : thread_list)
     {
-        thread->join();
+        thread_.join();
     }
 }

@@ -42,5 +42,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/bench.dir/DependInfo.cmake"
+  "CMakeFiles/fsbench.dir/DependInfo.cmake"
   )

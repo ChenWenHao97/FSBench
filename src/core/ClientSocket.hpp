@@ -1,3 +1,4 @@
+#pragma once
 #include "Socket.hpp"
 #include <iostream>
 #include "SocketException.hpp"

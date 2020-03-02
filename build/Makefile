@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cwh/bench
+CMAKE_SOURCE_DIR = /home/cwh/fsbench
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cwh/bench/build
+CMAKE_BINARY_DIR = /home/cwh/fsbench/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cwh/bench/build/CMakeFiles /home/cwh/bench/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cwh/fsbench/build/CMakeFiles /home/cwh/fsbench/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cwh/bench/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cwh/fsbench/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named bench
+# Target rules for targets named fsbench
 
 # Build rule for target.
-bench: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 bench
-.PHONY : bench
+fsbench: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 fsbench
+.PHONY : fsbench
 
 # fast build rule for target.
-bench/fast:
-	$(MAKE) -f CMakeFiles/bench.dir/build.make CMakeFiles/bench.dir/build
-.PHONY : bench/fast
+fsbench/fast:
+	$(MAKE) -f CMakeFiles/fsbench.dir/build.make CMakeFiles/fsbench.dir/build
+.PHONY : fsbench/fast
 
 src/core/BenchRes.o: src/core/BenchRes.cpp.o
 
@@ -129,7 +129,7 @@ src/core/BenchRes.o: src/core/BenchRes.cpp.o
 
 # target to build an object file
 src/core/BenchRes.cpp.o:
-	$(MAKE) -f CMakeFiles/bench.dir/build.make CMakeFiles/bench.dir/src/core/BenchRes.cpp.o
+	$(MAKE) -f CMakeFiles/fsbench.dir/build.make CMakeFiles/fsbench.dir/src/core/BenchRes.cpp.o
 .PHONY : src/core/BenchRes.cpp.o
 
 src/core/BenchRes.i: src/core/BenchRes.cpp.i
@@ -138,7 +138,7 @@ src/core/BenchRes.i: src/core/BenchRes.cpp.i
 
 # target to preprocess a source file
 src/core/BenchRes.cpp.i:
-	$(MAKE) -f CMakeFiles/bench.dir/build.make CMakeFiles/bench.dir/src/core/BenchRes.cpp.i
+	$(MAKE) -f CMakeFiles/fsbench.dir/build.make CMakeFiles/fsbench.dir/src/core/BenchRes.cpp.i
 .PHONY : src/core/BenchRes.cpp.i
 
 src/core/BenchRes.s: src/core/BenchRes.cpp.s
@@ -147,7 +147,7 @@ src/core/BenchRes.s: src/core/BenchRes.cpp.s
 
 # target to generate assembly for a file
 src/core/BenchRes.cpp.s:
-	$(MAKE) -f CMakeFiles/bench.dir/build.make CMakeFiles/bench.dir/src/core/BenchRes.cpp.s
+	$(MAKE) -f CMakeFiles/fsbench.dir/build.make CMakeFiles/fsbench.dir/src/core/BenchRes.cpp.s
 .PHONY : src/core/BenchRes.cpp.s
 
 src/core/test0.o: src/core/test0.cpp.o
@@ -156,7 +156,7 @@ src/core/test0.o: src/core/test0.cpp.o
 
 # target to build an object file
 src/core/test0.cpp.o:
-	$(MAKE) -f CMakeFiles/bench.dir/build.make CMakeFiles/bench.dir/src/core/test0.cpp.o
+	$(MAKE) -f CMakeFiles/fsbench.dir/build.make CMakeFiles/fsbench.dir/src/core/test0.cpp.o
 .PHONY : src/core/test0.cpp.o
 
 src/core/test0.i: src/core/test0.cpp.i
@@ -165,7 +165,7 @@ src/core/test0.i: src/core/test0.cpp.i
 
 # target to preprocess a source file
 src/core/test0.cpp.i:
-	$(MAKE) -f CMakeFiles/bench.dir/build.make CMakeFiles/bench.dir/src/core/test0.cpp.i
+	$(MAKE) -f CMakeFiles/fsbench.dir/build.make CMakeFiles/fsbench.dir/src/core/test0.cpp.i
 .PHONY : src/core/test0.cpp.i
 
 src/core/test0.s: src/core/test0.cpp.s
@@ -174,7 +174,7 @@ src/core/test0.s: src/core/test0.cpp.s
 
 # target to generate assembly for a file
 src/core/test0.cpp.s:
-	$(MAKE) -f CMakeFiles/bench.dir/build.make CMakeFiles/bench.dir/src/core/test0.cpp.s
+	$(MAKE) -f CMakeFiles/fsbench.dir/build.make CMakeFiles/fsbench.dir/src/core/test0.cpp.s
 .PHONY : src/core/test0.cpp.s
 
 # Help Target
@@ -184,7 +184,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... bench"
+	@echo "... fsbench"
 	@echo "... edit_cache"
 	@echo "... src/core/BenchRes.o"
 	@echo "... src/core/BenchRes.i"

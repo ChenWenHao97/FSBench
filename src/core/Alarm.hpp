@@ -1,10 +1,12 @@
-#include<signal.h>
+#pragma once
+#include <signal.h>
 #include <unistd.h>
-#include<time.h>
-// #include"Parser.hpp"
-#include<iostream>
-class Alarm{
-    public:
+#include <time.h>
+#include <iostream>
+
+class Alarm
+{
+public:
     static void sig_alarm(int signal)
     {
         Parser::get_instance().isexpired = true;
@@ -12,16 +14,17 @@ class Alarm{
     }
     void alarm_handle(int runtime)
     {
-         struct sigaction sa;
-        sa.sa_handler=sig_alarm;
-        sa.sa_flags=0;
-        if(sigaction(SIGALRM,&sa,NULL))
+        struct sigaction sa;
+        sa.sa_handler = sig_alarm;
+        sa.sa_flags = 0;
+        if (sigaction(SIGALRM, &sa, NULL))
         {
-            std::cout<<"alarm wrong"<<std::endl;
+            std::cout << "alarm wrong" << std::endl;
         }
-         alarm(runtime); 
+        alarm(runtime);
     }
-    Alarm(int runtime){
+    Alarm(int runtime)
+    {
         alarm_handle(runtime);
     }
 };
