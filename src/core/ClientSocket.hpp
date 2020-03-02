@@ -6,7 +6,7 @@ class ClientSocket : private Socket
 {
 public:
   ClientSocket(std::string host, int port);
-  virtual ~ClientSocket(){}
+  virtual ~ClientSocket() {}
   void Set_Non_Blocking(bool is);
   const ClientSocket &operator<<(const std::string &) const;
   const ClientSocket &operator>>(std::string &) const;
@@ -16,12 +16,13 @@ ClientSocket::ClientSocket(std::string host, int port)
 {
   if (!Socket::create())
   {
-    throw SocketException("Could not create client socket.");
+    throw SocketException("clinetsocket Could not create client socket.");
   }
 
   if (!Socket::connect(host, port))
   {
-    throw SocketException("Could not bind to port.");
+    // cout << "clientsocket错误的port:" << port << endl;
+    throw SocketException("clinetsocket Could not connect to port.");
   }
 }
 void ClientSocket::Set_Non_Blocking(bool is)
@@ -33,7 +34,7 @@ const ClientSocket &ClientSocket::operator<<(const std::string &s) const
 {
   if (!Socket::send(s))
   {
-    throw SocketException("Could not write to socket.");
+    throw SocketException("clinetsocket Could not write to socket.");
   }
 
   return *this;
@@ -43,7 +44,7 @@ const ClientSocket &ClientSocket::operator>>(std::string &s) const
 {
   if (!Socket::recv(s))
   {
-    throw SocketException("Could not read from socket.");
+    throw SocketException("clinetsocket Could not read from socket.");
   }
 
   return *this;

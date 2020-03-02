@@ -25,7 +25,6 @@ public:
     double PersecondRequest; //每秒连接数
     double PerRequesttime;   //每个连接秒数
     int TotalResponse;
-    // double  Transferedrate;//传输速率;
 
     BenchRes() : IsFinished(1), ConnectTime(0), DealTime(0), WaitTime(0), singleTime(0), IsFailed(0),
                  ResponseLength(0), TotalResponse(0), TotalFailed(0), TotalTime(0), TotalFinished(0),
@@ -42,12 +41,10 @@ public:
             total.TotalFailed += i.IsFailed;
             total.TotalTime += i.ConnectTime + i.DealTime + i.WaitTime;
             total.TotalResponse += i.ResponseLength;
-            // cout<<"totalfinished:"<<total.TotalFinished<<endl;
-            // cout<<"totaltime:"<<total.Transferedrate<<endl;
+           
         }
         total.PersecondRequest = (total.TotalFailed + total.TotalFinished) / total.TotalTime;
         total.PerRequesttime = total.TotalTime / (total.TotalFailed + total.TotalFinished);
-        // total.Transferedrate /= total.TotalTime;
 
         cout << "测试花费总时间:  " << total.TotalTime << endl;
         cout << "总请求数:        " << total.TotalFailed + total.TotalFinished << endl;
@@ -58,7 +55,6 @@ public:
         cout << endl;
 
         //连接时间从小到大排序
-
         cout << "连接时间(ms)" << endl;
         cout << "     最小            "
              << "中等            "
@@ -98,7 +94,6 @@ public:
         for (auto &i : res) //单个http请求的总时间,改变i值，得用引用
         {
             i.singleTime = i.ConnectTime + i.DealTime + i.WaitTime;
-            // cout << "singletime" << i.singleTime << endl;
         }
         sort(res.begin(), res.end(), [](BenchRes a, BenchRes b) { return a.singleTime < b.singleTime; });
 

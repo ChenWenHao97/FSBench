@@ -1,7 +1,7 @@
 #include "../utils/timer.hpp"
 #include "ClientSocket.hpp"
 #include "../http/HttpBuild.hpp"
-#include"Alarm.hpp"
+#include "Alarm.hpp"
 // #include "Socket.hpp"
 // #include "SocketException.hpp"
 #include <thread>
@@ -11,9 +11,21 @@ void thread_handle(const string url, int i) //一个soket一个线程
 {
     try
     {
-       
-        BenchRes res; //结果
+        if (url == "")
+        {
+            cout << "url不合法" << endl;
+            Parser::get_instance().usage();
+            exit(0);
+        }
         HttpBuild build;
+        if (build.GetPort(url) == -1)
+        {
+            cout << "端口号不合法" << endl;
+            Parser::get_instance().usage();
+            exit(0);
+        }
+
+        BenchRes res; //结果
         Timer connect_;
         ClientSocket client_socket(build.GetIpByURL(url), build.GetPort(url));
         res.ConnectTime = connect_.time_micro(); //连接时间
@@ -25,52 +37,54 @@ void thread_handle(const string url, int i) //一个soket一个线程
 
         string reply;
         Timer wait_;
+
         client_socket >> reply;
         res.ResponseLength = reply.size();
 
         res.WaitTime = wait_.time_micro(); //等待时间
         Parser::get_instance().SumResult(res);
-        // cout<<"thread::"<<i<<endl;
+
+        // cout << "thread:" << i << "结束" << endl;
     }
     catch (SocketException &e)
     {
         BenchRes failed;
         failed.IsFailed = 1;
         Parser::get_instance().SumResult(failed);
-        cout << "Exception was caught:" << e.description() << endl;
+        cout << "thread was caught:" << e.description() << endl;
     }
 }
 int main(int argc, char **argv)
 {
     try
-    {   cout<<"正在解析中，请稍后!"<<endl;
+    {
+        cout << "正在解析中，请稍后!" << endl;
         string url = Parser::get_instance().handle(argc, argv);
+
         Alarm setruntime(Parser::get_instance().runtime);
         vector<thread> thread_list;
         thread_list.reserve(Parser::get_instance().clients);
-        int dealclient;
         for (int i = 1; i <= Parser::get_instance().clients; i++)
         {
-            if(Parser::get_instance().isexpired)
+            if (Parser::get_instance().isexpired)
             {
                 // cout<<"从for循环退出"<<endl;
-                dealclient = i;
-                cout<<"!!!!!!!!!!!!!!!dealclient:!!!!!!!!!"<<dealclient<<endl;
-
+                // cout << "!!!!!!!!!!!!!!!dealclient:!!!!!!!!!:" << dealclient << endl;
                 break;
             }
             thread tmp(thread_handle, url, i);
-            if(tmp.joinable())
+            if (tmp.joinable())
                 thread_list.emplace_back(move(tmp));
             // thread_list.emplace_back(thread_handle, std::cref(url), i);
         }
-        int i = 0;
-        for (auto &thread_:thread_list)//几下线程数，防止一直在等待join,陷入死循环
+        for (auto &thread_ : thread_list) //几下线程数，防止一直在等待join,陷入死循环
         {
-
-            thread_.join();
-            cout<<"join:"<<++i<<endl;
-
+            if (thread_.joinable())
+                thread_.join();
+            if (Parser::get_instance().isexpired)
+            {
+                break;
+            }
         }
         HttpBuild build;
         cout << "服务器hostname:" << build.GetIpByURL(url) << endl;
@@ -79,12 +93,12 @@ int main(int argc, char **argv)
         cout << endl;
         BenchRes finalresult;
         vector<BenchRes> res = Parser::get_instance().GetParserResult();
-        // cout<<"结尾处"<<endl;
-        // finalresult.GetResult(res);
+        cout<<"结尾处"<<endl;
+        finalresult.GetResult(res);
     }
     catch (SocketException &e)
     {
-        std::cout << "Exception was caught:" << e.description() << "\n";
+        std::cout << "main  was caught:" << e.description() << "\n";
     }
 
     return 0;

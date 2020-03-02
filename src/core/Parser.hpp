@@ -21,7 +21,6 @@ public:
   static Parser &get_instance(void)
   {
     static Parser instance;
-    // cout<<"get_instance"<<endl;
     return instance;
   }
   void SumResult(BenchRes tmp)
@@ -35,12 +34,12 @@ public:
   }
   int force;
   int reload;
-  int runtime;        // second
-  volatile bool isexpired;//是否超时，加了volatile防止多线程出现问题
-  string ProxyServer; //代理
-  int clients;        //连接数
-  bool http10;        //默认http10,GET\POST\DELETE
-  bool http11;        // OPTIONS\PUT\DELETE,\TRACE\CONNECT
+  int runtime;             // second
+  volatile bool isexpired; //是否超时，加了volatile防止多线程出现问题
+  string ProxyServer;      //代理
+  int clients;             //连接数
+  bool http10;             //默认http10,GET\POST\DELETE
+  bool http11;             // OPTIONS\PUT\DELETE,\TRACE\CONNECT
   int method;
   string proxy;
   bool help;
@@ -88,7 +87,6 @@ public:
       {NULL, 0, NULL, 0}};
   string handle(int argc, char **argv)
   {
-    // cout<<"handle11"<<endl;
     int op;
     int options_index;
     while ((op = getopt_long(argc, argv, "frt:p:c:12?v", long_options,
@@ -109,10 +107,8 @@ public:
       case 'p':
         ProxyServer = optarg;
         break;
-
       case 'c':
         clients = atoi(optarg);
-        
         break;
       case '1':
         http10 = true, http11 = false;
@@ -135,43 +131,14 @@ public:
       usage();
       return "";
     }
-    // cout<<"handle22"<<endl;
 
-    // switch (method) {
-    // case METHOD_GET:
-    //   cout << "GET ";
-    //   break;
-    // case METHOD_HEAD:
-    //   cout << "HEAD ";
-    //   break;
-    // case METHOD_OPTIONS:
-    //   cout << "OPTIONS ";
-    //   http10 = false;
-    //   http11 = true;
-    //   break;
-    // case METHOD_TRACE:
-    //   cout << "TRACE";
-    //   http10 = false;
-    //   http11 = true;
-    //   break;
-    // }
-    // cout << argv[optind] << endl;
     return argv[optind];
   }
 
 private:
   Parser()
       : force(0), reload(0), runtime(30), clients(1), http10(true),
-        http11(false), ProxyServer(""),isexpired(false)
-  {
-    //    cout<<"Parser"<<endl;
-  }
+        http11(false), ProxyServer(""), isexpired(false) {}
   vector<BenchRes> Result;
   mutex ThreadLock;
 };
-// int main(int argc,char **argv)
-// {
-//     string URL= Parser::get_instance().handle(argc,argv);
-
-//     // cout <<"uRL"+URL<<endl;
-// }

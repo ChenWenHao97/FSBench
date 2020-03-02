@@ -10,8 +10,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include "../http/ParseHttpResponse.hpp"
-// #include "SocketException.hpp"
-
+#include <error.h>
+#include <sys/ioctl.h>
 const int MAXHOSTNAME = 200;
 const int MAXCONNECTIONS = 5;
 const int MAXRECV = 500;
@@ -22,16 +22,16 @@ public:
   Socket();
   virtual ~Socket();
 
-  // Server initialization
+  // 服务器初始化
   bool create();
   bool bind(const int port);
   bool listen() const;
   bool accept(Socket &) const;
 
-  // Client initialization
+  // 客户端
   bool connect(const std::string host, const int port);
 
-  // Data Transimission
+  // 数据传送
   bool send(const std::string) const;
   int recv(std::string &) const;
 
@@ -52,7 +52,6 @@ Socket::~Socket()
   {
     ::close(m_sock);
   }
-  // std::cout << "~socket" << std::endl;
 }
 
 bool Socket::create()
@@ -62,11 +61,20 @@ bool Socket::create()
   if (!is_valid())
     return false;
 
-  // TIME_WAIT - argh
-  int on = 1;
+  // time_wait
+   int on = 1;
   if (setsockopt(m_sock, SOL_SOCKET, SO_REUSEADDR, (const char *)&on,
                  sizeof(on)) == -1)
-    return false;
+         return false;
+
+  //避免time_wait
+  // struct linger so_linger;
+  // so_linger.l_onoff = true;
+  // so_linger.l_linger = 0;
+
+  // if (setsockopt(m_sock, SOL_SOCKET, SO_LINGER, (const char *)&so_linger,
+  //                sizeof(so_linger)) == -1)
+    // return false;
 
   return true;
 }
@@ -171,12 +179,10 @@ int Socket::recv(std::string &s) const
         hascontentlength -= recvdata;
       }
     }
-    // cout<<"!!!contentLength:"<<hascontentlength<<endl;
   }
-  // cout << "socketRECV!!!" << endl;
   if (status == -1)
   {
-    std::cout << "status == -1   errno == " << errno << "  in Socket::recv\n";
+    std::cout << "status == -1   errno == " << strerror(errno) << "  in Socket::recv\n";
     return 0;
   }
   else if (status == 0)
@@ -195,18 +201,28 @@ bool Socket::connect(const std::string host, const int port)
     return false;
   m_addr.sin_family = AF_INET;
   m_addr.sin_port = htons(port);
-
   int status = inet_pton(AF_INET, host.c_str(), &m_addr.sin_addr);
 
   if (errno == EAFNOSUPPORT)
     return false;
+  
+  struct timeval timeo = {5, 0};  
+  socklen_t len = sizeof(timeo);   
+  setsockopt(m_sock, SOL_SOCKET, SO_SNDTIMEO, &timeo, len);  
 
+
+  // set_non_blocking(true);
   status = ::connect(m_sock, (sockaddr *)&m_addr, sizeof(m_addr));
-  // std::cout <<status<<std::endl;
+  // unsigned long ul = 1;
+  // ioctl( m_sock, FIONBIO, &ul );  //设置为非阻塞模式 
+  
   if (status == 0)
     return true;
   else
+  {
+    std::cout << "socket connect:" << strerror(errno) << endl;
     return false;
+  }
 }
 
 void Socket::set_non_blocking(const bool b)
