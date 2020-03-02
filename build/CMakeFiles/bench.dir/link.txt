@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/bench.dir/src/core/BenchRes.cpp.o CMakeFiles/bench.dir/src/core/test0.cpp.o  -o bench -lpthread 

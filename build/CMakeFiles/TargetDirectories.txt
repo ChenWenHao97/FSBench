@@ -1,0 +1,3 @@
+/home/cwh/bench/build/CMakeFiles/rebuild_cache.dir
+/home/cwh/bench/build/CMakeFiles/bench.dir
+/home/cwh/bench/build/CMakeFiles/edit_cache.dir
