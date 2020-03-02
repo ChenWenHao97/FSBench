@@ -1,3 +1,0 @@
-/home/cwh/fsbench/build/CMakeFiles/rebuild_cache.dir
-/home/cwh/fsbench/build/CMakeFiles/fsbench.dir
-/home/cwh/fsbench/build/CMakeFiles/edit_cache.dir
